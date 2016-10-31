@@ -1,10 +1,8 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.AndroidPlayer" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/sampleAppScript.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Plugins/FSAdNetwork.cs">
     <Files>
-      <File FileName="Assets/Plugins/FSAdNetwork.cs" Line="1232" Column="109" />
-      <File FileName="Assets/Scripts/sampleAppScript.cs" Line="36" Column="39" />
-      <File FileName="Assets/Scripts/rectangleBannerSceneScript.cs" Line="21" Column="4" />
+      <File FileName="Assets/Plugins/FSAdNetwork.cs" Line="14" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

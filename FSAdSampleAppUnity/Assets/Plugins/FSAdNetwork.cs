@@ -48,25 +48,6 @@ public class FSAdNetwork : MonoBehaviour
 	};
 
 
-	//// FSAdAnalytics Delegate
-	public delegate void AdAnalyticsFinishedConversionFSAdAnalytics();
-	public delegate void AdAnalyticsFailedConversionFSAdAnalytics();
-
-	public static AdAnalyticsFinishedConversionFSAdAnalytics		OnFinishedConversionFSAdAnalytics;
-	public static AdAnalyticsFailedConversionFSAdAnalytics			OnFailedConversionFSAdAnalytics;
-
-	public void finishedConversionFSAdAnalytics(string args) {
-		if (OnFinishedConversionFSAdAnalytics != null) {
-			OnFinishedConversionFSAdAnalytics ();
-		}
-	}
-
-	public void failedConversionFSAdAnalytics(string args) {
-		if (OnFailedConversionFSAdAnalytics != null) {
-			OnFailedConversionFSAdAnalytics ();
-		}
-	}
-
 
 	//// FSAdNetwork Delegate
 	// FSAdBannerViewDelegate
@@ -852,10 +833,6 @@ public class FSAdNetwork : MonoBehaviour
 	static public void debugLogEnable(bool enable) {}
 	static public void testModeEnable(bool enable) {}
 
-	// Analytics
-	static public void analyticsDebugLogEnable(bool enable) {}
-	static public void analyticsConversion(string conversionId) {}
-
 	// Ad Banner
 	static public void initAdBannerView(string adUnitId, int x, int y, int w, int h) {}
 	static public void hideAdBannerView() {}
@@ -944,12 +921,6 @@ public class FSAdNetwork : MonoBehaviour
 	extern static public void debugLogEnable(bool enable);
 	[DllImport ("__Internal")]
 	extern static public void testModeEnable(bool enable);
-
-	// Analytics
-	[DllImport ("__Internal")]
-	extern static public void analyticsDebugLogEnable(bool enable);
-	[DllImport ("__Internal")]
-	extern static public void analyticsConversion(string conversionId);
 
 	// Ad Banner
 	[DllImport ("__Internal")]
@@ -1096,17 +1067,11 @@ public class FSAdNetwork : MonoBehaviour
 			AndroidInitializePlugin();
 
 			initFSAdNetwork();
-			initFSAdAnalytics();
 		}
 	}
 
 
 	static IntPtr class_UnityFSAd              		= IntPtr.Zero;
-	static IntPtr class_UnityFSAdAnalytics          = IntPtr.Zero;
-
-	static IntPtr method_initFSAdAnalytics			= IntPtr.Zero;
-	static IntPtr method_analyticsDebugLogEnable	= IntPtr.Zero;
-	static IntPtr method_analyticsConversion		= IntPtr.Zero;
 
 	static IntPtr method_initFSAdNetwork			= IntPtr.Zero;
 	static IntPtr method_setTestMode           		= IntPtr.Zero;
@@ -1176,19 +1141,9 @@ public class FSAdNetwork : MonoBehaviour
 			success = false;
 		}
 
-		IntPtr local_class_UnityFSAdAnalytics = AndroidJNI.FindClass("jp/co/fullspeed/polymorphicads_analytics/util/FSAnalyticsUnityPlugin");
-		if (local_class_UnityFSAdAnalytics != IntPtr.Zero) {
-			class_UnityFSAdAnalytics = AndroidJNI.NewGlobalRef( local_class_UnityFSAdAnalytics );
-			AndroidJNI.DeleteLocalRef( local_class_UnityFSAdAnalytics );
-		}
-
 		if (success) {
 
 			class_UnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-
-			method_initFSAdAnalytics = AndroidJNI.GetStaticMethodID( class_UnityFSAdAnalytics, "initFSAnalytics", "(Landroid/app/Activity;)V" );
-			method_analyticsDebugLogEnable = AndroidJNI.GetStaticMethodID( class_UnityFSAdAnalytics, "analyticsDebugLogEnable", "(Z)V" );
-			method_analyticsConversion = AndroidJNI.GetStaticMethodID( class_UnityFSAdAnalytics, "analyticsConversion", "(Ljava/lang/String;)V" );
 
 			method_initFSAdNetwork = AndroidJNI.GetStaticMethodID( class_UnityFSAd, "initFSAdNetwork", "(Landroid/app/Activity;)V" );
 			method_setTestMode = AndroidJNI.GetStaticMethodID( class_UnityFSAd, "setTestMode", "(Z)V" );
@@ -1278,26 +1233,6 @@ public class FSAdNetwork : MonoBehaviour
 		args[0].z = enable;
 		AndroidJNI.CallStaticVoidMethod( class_UnityFSAd, method_setTestMode, args );
 	}
-
-
-	// Analytics
-	static public void initFSAdAnalytics() {
-		jvalue[] args = new jvalue[1];
-		var j_activity = class_UnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-		args[0].l = j_activity.GetRawObject();
-		AndroidJNI.CallStaticVoidMethod( class_UnityFSAdAnalytics, method_initFSAdAnalytics, args );
-	}
-	static public void analyticsDebugLogEnable(bool enable) {
-		jvalue[] args = new jvalue[1];
-		args[0].z = enable;
-		AndroidJNI.CallStaticVoidMethod( class_UnityFSAdAnalytics, method_analyticsDebugLogEnable, args );
-	}
-	static public void analyticsConversion(string conversionId) {
-		jvalue[] args = new jvalue[1];
-		args[0].l = AndroidJNI.NewStringUTF( conversionId );
-		AndroidJNI.CallStaticVoidMethod( class_UnityFSAdAnalytics, method_analyticsConversion, args );
-	}
-
 
 	// Ad Banner
 	static private string bannerAdUnitId = "";

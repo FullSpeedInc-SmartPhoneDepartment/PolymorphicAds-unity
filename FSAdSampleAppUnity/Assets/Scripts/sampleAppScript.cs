@@ -14,24 +14,6 @@ public class sampleAppScript : MonoBehaviour {
 		if (!isInitialize) {
 			isInitialize = true;
 
-			#if UNITY_EDITOR || (!UNITY_ANDROID && !UNITY_IPHONE)
-				AdAnalyticsConvertionId = "";
-			//// iOS
-			#elif UNITY_IPHONE && !UNITY_EDITOR
-				AdAnalyticsConvertionId = "a1349fe6da5c145d748a72ff4b07d10b";
-			//// Android
-			#elif UNITY_ANDROID && !UNITY_EDITOR
-				AdAnalyticsConvertionId = "a1349fe6da5c145d748a72ff4b07d10b";
-			#endif
-				
-			// FSAdNetwork Analytics & Option
-			FSAdNetwork.analyticsDebugLogEnable(true);
-			FSAdNetwork.analyticsConversion(AdAnalyticsConvertionId);
-
-			FSAdNetwork.OnFinishedConversionFSAdAnalytics += OnFinishedConversionFSAdAnalytics;
-			FSAdNetwork.OnFailedConversionFSAdAnalytics += OnFailedConversionFSAdAnalytics;
-
-
 			FSAdNetwork.debugLogEnable(true);
 			FSAdNetwork.testModeEnable (false);
 		}
@@ -45,19 +27,6 @@ public class sampleAppScript : MonoBehaviour {
 	
 	void OnDestroy() {
 		Debug.Log ("sampleAppScript - OnDestroy");
-
-		FSAdNetwork.OnFinishedConversionFSAdAnalytics -= OnFinishedConversionFSAdAnalytics;
-		FSAdNetwork.OnFailedConversionFSAdAnalytics -= OnFailedConversionFSAdAnalytics;
-	}
-
-
-	// Delegate
-	private void OnFinishedConversionFSAdAnalytics() {
-		Debug.Log ("sampleAppScript - OnFinishedConversionFSAdAnalytics");
-
-	}
-	private void OnFailedConversionFSAdAnalytics() {
-		Debug.Log ("sampleAppScript - OnFailedConversionFSAdAnalytics");
 
 	}
 
